@@ -20,32 +20,50 @@ class Jogador{
 	
 	public Jogador() {}
 	
-	public void imprimir()
-    {
-        System.out.print(this.id + " ## ");
+	public void imprimir(){
+        System.out.print("[" + this.id + " ## ");
         System.out.print(this.nome + " ## ");
         System.out.print(this.altura + " ## ");
         System.out.print(this.peso +" ## ");
         System.out.print(this.anoNascimento + " ## ");
         System.out.print(this.universidade +" ## ");
         System.out.print(this.cidadeNascimento +" ## ");
-        System.out.print(this.estadoNascimento);
-
+        System.out.print(this.estadoNascimento + "]");
+        System.out.println();
     }
 	
-	public void ler(String entrada)
-    {
-        String [] elemento = entrada.split(",");
-        this.id = Integer.parseInt(elemento[0]);
+	public void ler(String entrada){
+       
+		String [] elemento = entrada.split(",", 8);
+        this.id = Integer.parseInt(elemento[0]);    
         this.nome = elemento[1];
         this.altura = Integer.parseInt(elemento[2]);
         this.peso = Integer.parseInt(elemento[3]);
         this.universidade = elemento[4];
+        
+        if (elemento[4].equals(",") || elemento[4].equals("")){
+    			this.universidade = "nao informado";
+    	}
+        
         this.anoNascimento = Integer.parseInt(elemento[5]);
         this.cidadeNascimento = elemento[6];
+        if (elemento[6].equals(",") || elemento[6].equals("")){
+    			this.cidadeNascimento = "nao informado";
+    	}
+        
+        
         this.estadoNascimento = elemento[7];
-
+        if (elemento[7].equals(",") || elemento[6].equals("")){
+        			this.estadoNascimento = "nao informado";
+        	}
     }
+
+	
+	public Jogador clone(){
+        Jogador jogador2 = new Jogador();
+        return jogador2;
+    }
+
 	
 	
 	public int getId() {
@@ -118,8 +136,7 @@ public class Main {
 				
 			
 				Jogador jogador = new Jogador();
-				jogador.ler(str);
-				
+				jogador.ler(str);				
 				pessoa[contador++] = jogador;
 				str = MyIO.readLine();
 			}
@@ -128,9 +145,8 @@ public class Main {
 			
 			for(int i = 0; i < quantidade; i++) {
 				id = MyIO.readInt();				
-				pessoa[id].imprimir();
-				System.out.println();
-			}			
+				pessoa[id].imprimir();				
+			}		
 			
 			
 	}
