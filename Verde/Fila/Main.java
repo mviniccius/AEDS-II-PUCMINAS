@@ -63,7 +63,7 @@ class Fila {
 			throw new Exception("Não foi possível desenfileirar nenhum elemento: a fila está vazia!");
 	}
 	
-	public void imprimir() throws Exception{
+	public void mostrar() throws Exception{
 		
 		int posicao;
 		if (! filaVazia()) {
@@ -76,6 +76,53 @@ class Fila {
 		} else
 			throw new Exception ("Não foi possível mostrar o conteúdo da fila: a fila está vazia!");
 	}
+	
+	double obterMediaAltura() { //media arredondada das alturas presentes dos jogadores na fila
+		
+		double mediaAltura = 0;
+		double count = 0;
+		double altura = 0;
+		int frente = this.frente;	
+		frente = (frente + 1) % fila.length;
+		
+			if(frente == tras) {
+				return 0;
+			}
+			while(frente % fila.length != tras % fila.length){
+			altura += fila[frente].getAltura();
+			count++;
+			frente++;
+			}
+		mediaAltura = altura/count;		
+	//	return mediaAltura;
+		return Math.round(mediaAltura);
+	}
+//		if(frente  > tras) {
+//			// Percorre do índice da frente até o final da fila
+//	        for (int i = frente; i < fila.length; i++) {
+//	            altura += fila[i].getAltura();
+//	            count++;
+//	        	}
+//	     // Volta ao início da fila e percorre até o índice da tras
+//            for (int i = 0; i <= tras; i++) {
+//	            altura += fila[i].getAltura();
+//	            count++;
+//	            }  		
+//	}else {
+//        // Percorre da frente até a tras
+//        for (int i = frente; i <= tras; i++) {
+//        	altura += fila[i].getAltura();
+//        	count++;
+//        }
+//    }
+//    System.out.println();
+//    mediaAltura = altura/count;
+//	
+//	return mediaAltura;
+//	}
+	
+	
+	//final da classe fila
 }
 
 
@@ -211,17 +258,16 @@ public class Main {
 		int linha;
 		int qtdeJogadores;
 		int i;
-		int media;
-		int altura = 0;
+//		double mediaAlturaFilaJogador;
 		
 		Jogador[] pessoa = new Jogador[4000]; //meu vetor de jogadores
 		String str;
 		String diretorio;
 		String id;
-		String leituraComando[];
+		String comandoFila;
+		String filaComando[];
 		Fila filaJogador;
 		
-		String comandoFila;
 		
 		filaJogador = new Fila(6);
 	//	diretorio = "/tmp/jogadores.txt";
@@ -246,75 +292,67 @@ public class Main {
 			leitura.fecharArquivo();
 	//aqui deve ser inserido o codigo que vai enfileirar	
 		
-			contador = 1;
+			
 			id = MyIO.readLine();
 			
 			while(!id.equals("FIM")) {
-				linha = Integer.parseInt(id);
-				
+				linha = Integer.parseInt(id);						
 				try {
 				filaJogador.enfileirar(pessoa[linha]);	
-				altura += pessoa[linha].getAltura();
-				media = altura/contador;
-				System.out.println("media altura jogador: " + media);
-				contador ++;
+				//mediaAlturaFilaJogador = filaJogador.obterMediaAltura();
+				//System.out.printf("Altura jogador: " + mediaAlturaFilaJogador);
+				System.out.println(filaJogador.obterMediaAltura());
 				}catch(java.lang.Exception e) {
-					filaJogador.desenfileirar();
+					filaJogador.desenfileirar();					
 					filaJogador.enfileirar(pessoa[linha]);
-					altura += pessoa[linha].getAltura();
-					media = altura/contador;
-					System.out.println("media altura jogador: " + media);
-					contador ++;
+//					mediaAlturaFilaJogador = filaJogador.obterMediaAltura();
+//					System.out.println("Altura jogador: " + mediaAlturaFilaJogador);
+					System.out.println(filaJogador.obterMediaAltura());
+					
 				}				
 				//pessoa[linha].imprimir();
 				id = MyIO.readLine();				
 			}		
 	//aqui escrever o codigo para realizar a segunda parte da questao 	 
 			
-			qtdeJogadores = MyIO.readInt(); 	
-			System.out.println(qtdeJogadores);
-			
-			for(i = 0; i < qtdeJogadores; i++) {	
+			qtdeJogadores = MyIO.readInt(); 						
+			for(i = 0; i < qtdeJogadores; i++) {						
+				
 				
 				comandoFila = MyIO.readLine();
+				filaComando = comandoFila.split(" ");
 				
-				
-				leituraComando = comandoFila.split(" ");
-				
-				
-				if(leituraComando[0].equals("I")) {
-					id = leituraComando[1];
+				if(filaComando[0].equals("I")) {
+					id = MyIO.readLine();
 					linha = Integer.parseInt(id);
 					try {
-						filaJogador.enfileirar(pessoa[linha]);	
-						altura += pessoa[linha].getAltura();
-						//media = altura/contador;
-					//	System.out.println("media altura jogador: " + media);
-						contador ++;
-						
+						filaJogador.enfileirar(pessoa[linha]);
+//						mediaAlturaFilaJogador = filaJogador.obterMediaAltura();
+//						System.out.println("Altura jogador: " + mediaAlturaFilaJogador);
+						System.out.println(filaJogador.obterMediaAltura());
+							
 						}catch(java.lang.Exception e) {
 							filaJogador.desenfileirar();							
 							filaJogador.enfileirar(pessoa[linha]);
-							altura += pessoa[linha].getAltura();
-							media = altura/contador;
-							System.out.println("media altura jogador: " + media);
-							contador ++;
+//							mediaAlturaFilaJogador = filaJogador.obterMediaAltura();
+//							System.out.println("Altura jogador: " + mediaAlturaFilaJogador);
+							System.out.println(filaJogador.obterMediaAltura());
+								
 							
 						}				
 					
-				}else {
-					Jogador a;
-					 a = filaJogador.desenfileirar();
-					System.out.println("(R) " + a.getNome());
+				}
+				
+				if(comandoFila.equals("R")) {
+					linha = Integer.parseInt(id);
+					filaJogador.desenfileirar();
+					System.out.println("(R) " + pessoa[linha].getNome());
 				}
 				
 				
 			}
 			
-			
-			
-			filaJogador.imprimir(); // Imprimir o conteudo da fila
-			
+			filaJogador.mostrar(); // Imprimir o conteudo da fila
 			
 	}
 
