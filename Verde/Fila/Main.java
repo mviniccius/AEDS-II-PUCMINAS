@@ -66,12 +66,14 @@ class Fila {
 	public void mostrar() throws Exception{
 		
 		int posicao;
+		int count = 0;
 		if (! filaVazia()) {
 			System.out.println("Conteúdo da fila:");
 			for (int i = frente; i < tras; i++) {
 				posicao = i % tamanho;
-				System.out.print("Posição: " + posicao + ": ");
+				System.out.print("Posição: " + count + ": ");
 				fila[posicao].imprimir();
+				count++;
 			}
 		} else
 			throw new Exception ("Não foi possível mostrar o conteúdo da fila: a fila está vazia!");
@@ -80,18 +82,19 @@ class Fila {
 	double obterMediaAltura(int contador) { //media arredondada das alturas presentes dos jogadores na fila
 		
 		double mediaAltura = 0;
-		double countFila = 0;
+		double alturaTotal = 0;
 		double altura = 0;
-		int count = contador;
-		int frenteAnda;	
-		frenteAnda = count % 6;		
+		int count = 0;
+		int posicao;	
+			
 				
-			while(frenteAnda % fila.length != tras % fila.length){	// array de tamanho 6 => vai de 0 a 5 % da divisao por 6
-			altura += fila[frenteAnda].getAltura();
-			countFila++;
-			frenteAnda++;
+			for(int i = frente; i < tras; i++){	// array de tamanho 6 => vai de 0 a 5 % da divisao por 6
+				posicao = i % 6;
+				altura = fila[posicao].getAltura();
+				alturaTotal += altura;
+				count++;
 			}
-		mediaAltura = altura/countFila;		
+		mediaAltura = alturaTotal/count;		
 //		return mediaAltura;
 		return Math.round(mediaAltura);
 	}
@@ -296,7 +299,7 @@ public class Main {
 				filaComando = comandoFila.split(" ");
 				
 				if(filaComando[0].equals("I")) {
-					id = MyIO.readLine();
+					id = filaComando[1];
 					linha = Integer.parseInt(id);
 					try {
 						filaJogador.enfileirar(pessoa[linha]);
@@ -313,9 +316,8 @@ public class Main {
 				}
 				
 				if(comandoFila.equals("R")) {
-					linha = Integer.parseInt(id);
-					filaJogador.desenfileirar();
-					System.out.println("(R) " + pessoa[linha].getNome());
+					linha = Integer.parseInt(id);					
+					System.out.println("(R) " + filaJogador.desenfileirar().getNome());
 				}
 				
 				
